@@ -703,7 +703,7 @@ def process_string_letter(input_str):
 
 def main():
     config = load_config()
-    full_path = get_clickable_file_path("示例数据.xlsx")
+    full_path = get_clickable_file_path("example.xlsx")
     while True:
         query = input("\n菜单：\n1.同一公式批量数值计算；\n2.平均值；\n3.总体标准差；\n4.A类不确定度；\n5.execl表格转LaTeX；\n6.分析实验讲义；\n7.提取表格；\n8.单变量不确定度分析；\n9.合成不确定度分析；\nconfig-查看设置；\nq-退出;\n请选择：").strip().lower()
         if query == 'q':
