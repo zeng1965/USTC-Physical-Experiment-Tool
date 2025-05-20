@@ -718,7 +718,7 @@ def main():
             continue
 
         if query=='9':
-            formula_input = input("\n请输入公式（格式如'g=\\dfrac{4\\pi^2l}{T^2}'）\n（公式中若有连续的变量相乘，且这些变量中有变量d，请确保变量d在最右侧）：").strip()
+            formula_input = input("\n请输入公式（格式如'd=\\dfrac{k\\lambda}{\\sin \\phi}',sin、cos、tan、ln前要有“\\”）\n（公式中若有连续的变量相乘，且这些变量中有变量d，请确保变量d在最右侧）：").strip()
             if '=' not in formula_input:
                 print("公式格式错误，需要包含等号。")
                 continue
@@ -1384,7 +1384,7 @@ def main():
             print('\n'.join(latex_code))
 
         if query == '1':
-            formula_input = input("\n请输入公式（格式如'g=\\dfrac{4\\pi^2l}{T^2}'）\n（公式中若有连续的变量相乘，且这些变量中有变量d，请确保变量d在最右侧）：").strip()
+            formula_input = input("\n请输入公式（格式如'd=\\dfrac{k\\lambda}{\\sin \\phi}',sin、cos、tan、ln前要有“\\”）\n（公式中若有连续的变量相乘，且这些变量中有变量d，请确保变量d在最右侧）：").strip()
             if '=' not in formula_input:
                 print("公式格式错误，需要包含等号。")
                 continue
