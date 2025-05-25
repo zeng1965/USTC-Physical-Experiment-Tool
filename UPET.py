@@ -643,7 +643,6 @@ def process_string(input_str):
     # 使用正则表达式匹配字母或数字后接反斜杠的情况，并在中间插入特定字符串
     input_str=re.sub(r'\\(sin|cos|tan|ln)',r'\\\1 ',input_str)
     input_str = handle_spaces(input_str)
-    print(input_str)
     input_str=re.sub(r'_([^{])', r'_{\1}', input_str)
     input_str = re.sub(
         r'''
@@ -730,8 +729,6 @@ def main():
 
             try:
                 expr = parse_latex_formula(rhs)
-                print(rhs)
-                print(expr)
 
             except Exception as e:
                 print("解析公式时出错:", e)
@@ -933,7 +930,6 @@ def main():
             except Exception as e:
                 print("读取文件失败:", e)
                 continue
-            print(df)
 
             data_columns = df.columns.astype(str).tolist()
             var_to_column = {}
@@ -1068,7 +1064,6 @@ def main():
                 
                 # 添加DOC文件读取结果校验
                 if content.startswith("DOC文件读取失败") or content.startswith("不支持"):
-                    print(content)
                     if sys.platform == 'win32' and "权限" in content:
                         print("提示：请确保Word程序未被占用，且文件未被加密")
                     continue
@@ -1395,9 +1390,7 @@ def main():
             rhs=process_formula(rhs)
 
             try:
-                print(rhs)
                 expr = parse_latex_formula(rhs)
-                print(expr)
 
             except Exception as e:
                 print("解析公式时出错:", e)
@@ -1573,7 +1566,6 @@ def main():
                 try:
                     expr_subs = expr_subs.subs(constant_subs_cal)
                     expr_eval = expr_subs.subs(subs_dict_cal)
-                    print(expr_eval)
                     if result_unit:
                         result = convert_to(expr_eval, eval(f"units.{result_unit.replace("^","**")}")).as_coeff_Mul()[0].evalf(5)
                     else:result=expr_eval
