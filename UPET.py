@@ -1289,19 +1289,19 @@ def main():
             
             # 用户选择方向
             while True:
-                direction = input("请选择表格方向（原方向/转置）：").strip().lower()
-                if direction in ['原方向', '转置']:
+                direction = input("选择表格方向\n1.原方向\n2.转置\n请选择（输入选项对应的数字序号）：").strip().lower()
+                if direction in ['1', '2']:
                     break
                 print("输入错误，请重新输入！")
 
             while True:
-                line_number=input("请选择是否添加序号（是/否）：").strip().lower()
-                if line_number in ['是', '否']:
+                line_number=input("是否添加序号\n1.否\n2.每列上方添加序号\n3.每行左侧添加序号\n请选择（输入选项对应序号）：").strip().lower()
+                if line_number in ['1','2','3']:
                     break
                 print("输入错误，请重新输入！")
             
             # 处理所有表头内容
-            latex_vars = [process_content(str(col)) for col in selected_columns]
+            latex_vars = [process_content(str(col)).replace('Unnamed','') for col in selected_columns]
             
             # 处理有效数据行
             data = df[selected_columns]
@@ -1309,20 +1309,29 @@ def main():
             
             # 根据方向生成表格
             latex_code = []
-            if direction == '原方向':
+            if direction == '1':
                 # 横向表格结构
-                if line_number=='是':
-                    latex_code = [
-                        f"\\begin{{tabular}}{{|c|{'c|' * len(selected_columns)}}}",
-                        "    \\hline",
-                        "     & " + " & ".join(latex_vars) + " \\\\",
-                        "    \\hline"
-                    ]
-                else :
+                if line_number=='1':
                     latex_code = [
                         f"\\begin{{tabular}}{{|c|{'c|' * (len(selected_columns)-1)}}}",
                         "    \\hline",
                         "  " + " & ".join(latex_vars) + " \\\\",
+                        "    \\hline"
+                    ]
+                elif line_number=='2' :
+                    latex_code = [
+                        f"\\begin{{tabular}}{{|c|{'c|' * (len(selected_columns)-1)}}}",
+                        "    \\hline",
+                        " & ".join(map(str, range(1, len(selected_columns)+1))) + " \\\\",
+                        "    \\hline",
+                        "  " + " & ".join(latex_vars) + " \\\\",
+                        "    \\hline"
+                    ]
+                elif line_number=='3':
+                    latex_code = [
+                        f"\\begin{{tabular}}{{|c|{'c|' * len(selected_columns)}}}",
+                        "    \\hline",
+                        "     & " + " & ".join(latex_vars) + " \\\\",
                         "    \\hline"
                     ]
                 
@@ -1331,13 +1340,13 @@ def main():
                     values = []
                     for x in data.loc[idx]:
                         try:
-                            cell_str = format_cell_value(x)
+                            cell_str = format_cell_value(x).replace('Unnamed','')
                             processed=process_cell_content(cell_str)
                             processed = process_content(processed)
                         except Exception as e:
                             processed = f"处理错误: {str(x)}"
                         values.append(processed)
-                    if line_number=='是':
+                    if line_number=='3':
                         latex_code.append(f"    {row_num} & {' & '.join(values)} \\\\")
                     else:
                         latex_code.append(f"     {' & '.join(values)} \\\\")
@@ -1346,20 +1355,26 @@ def main():
             
             else:  # 纵向模式
                 # 纵向表格结构
-                if line_number=='是':
+                if line_number=='2':
                     latex_code = [
                         f"\\begin{{tabular}}{{|c|{'c|' * len(valid_indices)}}}",
                         "    \\hline",
-                        "    变量 & " + " & ".join(map(str, range(1, len(valid_indices)+1))) + " \\\\",
+                        "    & " + " & ".join(map(str, range(1, len(valid_indices)+1))) + " \\\\",
                         "    \\hline"
                     ]
-                else :
+                elif line_number=='1' :
                     latex_code = [
                         f"\\begin{{tabular}}{{|c|{'c|' * len(valid_indices)}}}",
+                        "    \\hline"
+                    ]
+                elif line_number=='3' :
+                    latex_code = [
+                        f"\\begin{{tabular}}{{|c|{'c|' * (len(valid_indices)+1)}}}",
                         "    \\hline"
                     ]
                 
                 # 填充数据行（统一处理内容）
+                row_num=0
                 for var, col in zip(latex_vars, selected_columns):
                     values = []
                     for idx in valid_indices:
@@ -1371,7 +1386,11 @@ def main():
                         except Exception as e:
                             processed = f"处理错误: {str(x)}"
                         values.append(processed)
-                    latex_code.append(f"    {var} & {' & '.join(values)} \\\\")
+                    if line_number=='3':
+                        row_num+=1
+                        latex_code.append(f"    {row_num} & {var} & {' & '.join(values)} \\\\")
+                    else:
+                        latex_code.append(f"    {var} & {' & '.join(values)} \\\\")
                     latex_code.append("    \\hline")
                 latex_code.append("\\end{tabular}")
             
