@@ -1,5 +1,6 @@
 # 使用前先运行
 # pip install pandas sympy numpy pdfplumber openpyxl python-docx PyPDF2 pillow pywin32 openai sympy-measurement
+# 将example.xlsx和help.docx下载到同一文件夹
 
 from math import sqrt
 import pandas as pd
@@ -703,6 +704,7 @@ def process_string_letter(input_str):
 def main():
     config = load_config()
     full_path = get_clickable_file_path("example.xlsx")
+    print("请确认您已经将example.xlsx和help.docx下载到同一文件夹")
     while True:
         query = input("\n菜单：\n1.同一公式批量数值计算；\n2.平均值；\n3.总体标准差；\n4.A类不确定度；\n5.execl表格转LaTeX；\n6.分析实验讲义；\n7.提取表格；\n8.单变量不确定度分析；\n9.合成不确定度分析；\nhelp-查看帮助\nconfig-查看设置；\nq-退出;\n请选择：").strip().lower()
         if query == 'help':
